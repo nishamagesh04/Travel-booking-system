@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Bookings - TravelEase India</title>
+
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- FontAwesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+
+body{
+    min-height:100vh;
+    background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    font-family:'Segoe UI',sans-serif;
+    color:white;
+}
+
+.bookings-container{ padding:40px 0; }
+
+.page-header{ text-align:center; margin-bottom:40px; }
+.page-header h1{ font-weight:700; }
+
+.booking-card{
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(12px);
+    border-radius:16px;
+    padding:20px;
+    margin-bottom:20px;
+    border:1px solid rgba(255,255,255,0.15);
+    transition:0.3s;
+}
+.booking-card:hover{ transform:translateY(-4px); }
+
+.booking-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.booking-title{ font-weight:600; }
+
+.status-badge{
+    padding:6px 14px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:600;
+}
+
+.status-pending{ background:#ffc107; color:#000; }
+.status-approved{ background:#28a745; }
+.status-completed{ background:#17a2b8; }
+.status-cancelled{ background:#dc3545; }
+
+.info-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:12px;
+}
+
+.info-item{
+    background:rgba(255,255,255,0.12);
+    padding:12px;
+    border-radius:10px;
+    border-left:4px solid #4facfe;
+}
+
+.info-item strong{
+    display:block;
+    font-size:13px;
+    color:#4facfe;
+}
+
+.info-item span{
+    font-size:14px;
+    font-weight:500;
+    color:#fff;
+}
+
+.guide-section{
+    background:rgba(79,172,254,0.15);
+    border:1px solid rgba(79,172,254,0.35);
+    border-radius:12px;
+    padding:15px;
+    margin-top:15px;
+}
+
+.guide-header{
+    font-weight:600;
+    margin-bottom:10px;
+}
+
+.booking-date{
+    font-size:12px;
+    opacity:0.7;
+    margin-top:15px;
+    border-top:1px solid rgba(255,255,255,0.1);
+    padding-top:10px;
+}
+
+.no-bookings{
+    text-align:center;
+    padding:60px;
+    background:rgba(255,255,255,0.08);
+    border-radius:16px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container bookings-container">
+
+<div class="page-header">
+<h1>My Bookings</h1>
+<p>Track your travel plans and booking status</p>
+</div>
+
+{% if bookings %}
+{% for b in bookings %}
+
+<div class="booking-card">
+
+<div class="booking-header">
+<h5 class="booking-title">
+<i class="fas fa-map-marker-alt"></i> {{ b.place_name }}
+</h5>
+
+{% if b.status == 'Pending' %}
+<span class="status-badge status-pending">Pending</span>
+{% elif b.status == 'Approved' %}
+<span class="status-badge status-approved">Approved</span>
+{% elif b.status == 'Completed' %}
+<span class="status-badge status-completed">Completed</span>
+{% elif b.status == 'Cancelled' %}
+<span class="status-badge status-cancelled">Cancelled</span>
+{% endif %}
+</div>
+
+<div class="info-grid">
+
+<div class="info-item">
+<strong><i class="fas fa-calendar"></i> Travel Date</strong>
+<span>{{ b.travel_date }}</span>
+</div>
+
+<div class="info-item">
+<strong><i class="fas fa-clock"></i> Duration</strong>
+<span>{{ b.days }} Days</span>
+</div>
+
+<div class="info-item">
+<strong><i class="fas fa-users"></i> Persons</strong>
+<span>{{ b.persons }}</span>
+</div>
+
+<div class="info-item">
+<strong><i class="fas fa-map-pin"></i> Pickup</strong>
+<span>{{ b.pickup_location }}</span>
+</div>
+
+<div class="info-item">
+<strong><i class="fas fa-credit-card"></i> Payment</strong>
+<span>{{ b.payment_method }}</span>
+</div>
+
+<div class="info-item">
+<strong><i class="fas fa-rupee-sign"></i> Total Price</strong>
+<span>₹{{ b.price }}</span>
+</div>
+
+</div>
+
+{% if b.suggested_places %}
+<div class="info-item mt-3">
+<strong><i class="fas fa-lightbulb"></i> Suggested Places</strong>
+<span>{{ b.suggested_places }}</span>
+</div>
+{% endif %}
+
+{% if b.status in ['Approved','Completed'] and b.guide_name %}
+<div class="guide-section">
+<div class="guide-header"><i class="fas fa-user-tie"></i> Your Tourist Guide</div>
+
+<p><i class="fas fa-user"></i> {{ b.guide_name }}</p>
+<p><i class="fas fa-phone"></i> {{ b.guide_phone }}</p>
+<p><i class="fas fa-envelope"></i> {{ b.guide_email }}</p>
+</div>
+{% endif %}
+
+<div class="booking-date">
+<i class="fas fa-history"></i> Booked on: {{ b.booking_date }}
+</div>
+
+</div>
+
+{% endfor %}
+{% else %}
+
+<div class="no-bookings">
+<i class="fas fa-suitcase-rolling fa-3x mb-3"></i>
+<h3>No Bookings Yet</h3>
+<p>You haven't made any bookings yet.</p>
+<a href="/explore" class="btn btn-primary">Explore Destinations</a>
+</div>
+
+{% endif %}
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin - Hotel Approvals</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+    <h3>Pending Hotels</h3>
+
+    <table class="table table-bordered">
+        <tr>
+            <th>Hotel</th>
+            <th>Place</th>
+            <th>Price</th>
+            <th>Rooms</th>
+            <th>Action</th>
+        </tr>
+        {% for h in hotels %}
+        <tr>
+            <td>{{ h.hotel_name }}</td>
+            <td>{{ h.place_name }}</td>
+            <td>₹{{ h.price_per_night }}</td>
+            <td>{{ h.total_rooms }}</td>
+            <td>
+                <a href="/approve_hotel/{{ h.id }}" class="btn btn-success btn-sm">Approve</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+</body>
+</html>

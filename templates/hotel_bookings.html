@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Hotel Bookings - TravelEase India</title>
+
+    
+
+    <!-- Bootstrap CDN -->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Modern CSS Framework -->
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern.css') }}">
+
+    <!-- Font Awesome Icons -->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    
+
+    <style>
+
+        body {
+
+            min-height: 100vh;
+
+        }
+
+        
+
+        .search-container {
+
+            padding: 40px 0;
+
+        }
+
+        
+
+        .page-header {
+
+            text-align: center;
+
+            margin-bottom: 50px;
+
+            animation: fadeInUp 0.8s ease-out;
+
+        }
+
+        
+
+        .page-header h1 {
+
+            font-size: 2.5rem;
+
+            font-weight: 700;
+
+            margin-bottom: 15px;
+
+        }
+
+        
+
+        .page-header p {
+
+            font-size: 1.1rem;
+
+            opacity: 0.9;
+
+        }
+
+        
+
+        .search-card {
+
+            background: #ffffff;
+
+            border: 1px solid #e0e0e0;
+
+            border-radius: var(--border-radius-xl);
+
+            padding: 30px;
+
+            margin-bottom: 40px;
+
+            box-shadow: var(--shadow-lg);
+
+            animation: fadeInUp 0.8s ease-out;
+
+        }
+
+        
+
+        .search-form {
+
+            display: flex;
+
+            gap: 15px;
+
+            align-items: end;
+
+        }
+
+        
+
+        .search-input {
+
+            flex: 1;
+
+        }
+
+        
+
+        .hotels-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+
+            gap: 25px;
+
+            margin-top: 30px;
+
+        }
+
+        
+
+        .hotel-card {
+
+            background: #ffffff;
+
+            border: 1px solid #e0e0e0;
+
+            border-radius: var(--border-radius-xl);
+
+            overflow: hidden;
+
+            transition: var(--transition);
+
+            animation: fadeInUp 0.8s ease-out;
+
+        }
+
+        
+
+        .hotel-card:hover {
+
+            transform: translateY(-8px);
+
+            box-shadow: var(--shadow-2xl);
+
+        }
+
+        
+
+        .hotel-image {
+
+            height: 200px;
+
+            background: var(--info-gradient);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color: white;
+
+            font-size: 3rem;
+
+        }
+
+        
+
+        .hotel-content {
+
+            padding: 20px;
+
+        }
+
+        
+
+        .hotel-name {
+
+            font-size: 1.3rem;
+
+            font-weight: 700;
+
+            color: #333;
+
+            margin-bottom: 8px;
+
+        }
+
+        
+
+        .hotel-location {
+
+            color: var(--primary-color);
+
+            font-size: 0.9rem;
+
+            margin-bottom: 8px;
+
+            display: flex;
+
+            align-items: center;
+
+        }
+
+        
+
+        .hotel-location i {
+
+            margin-right: 5px;
+
+        }
+
+        
+
+        .hotel-details {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-top: 15px;
+
+            padding-top: 15px;
+
+            border-top: 1px solid #e0e0e0;
+
+        }
+
+        
+
+        .hotel-price {
+
+            font-size: 1.2rem;
+
+            font-weight: 700;
+
+            color: var(--success-color);
+
+        }
+
+        
+
+        .hotel-rooms {
+
+            color: #666;
+
+            font-size: 0.9rem;
+
+        }
+
+        
+
+        .no-hotels {
+
+            background: #ffffff;
+
+            border: 1px solid #e0e0e0;
+
+            border-radius: var(--border-radius-xl);
+
+            padding: 60px 40px;
+
+            text-align: center;
+
+            margin-top: 50px;
+
+        }
+
+        
+
+        .no-hotels i {
+
+            font-size: 4rem;
+
+            color: var(--info-color);
+
+            margin-bottom: 20px;
+
+        }
+
+        
+
+        .no-hotels h3 {
+
+            color: #333;
+
+            margin-bottom: 15px;
+
+        }
+
+        
+
+        .no-hotels p {
+
+            color: #666;
+
+            margin-bottom: 30px;
+
+        }
+
+    </style>
+
+</head>
+
+
+
+<body>
+
+
+
+<!-- NAVBAR -->
+
+<nav class="navbar navbar-modern">
+
+    <div class="container">
+
+        <a href="/dashboard" class="navbar-brand-modern">
+
+            <i class="fas fa-globe-americas me-2"></i>
+
+            TravelEase India
+
+        </a>
+
+        <div class="d-flex align-items-center">
+
+            <span class="me-3">
+
+                <i class="fas fa-hotel me-2"></i>
+
+                Browse Hotels
+
+            </span>
+
+            <a href="/dashboard" class="btn btn-outline-modern btn-modern">
+
+                <i class="fas fa-arrow-left me-2"></i>Dashboard
+
+            </a>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+
+<!-- SEARCH CONTENT -->
+
+<div class="container search-container">
+
+    
+
+    <!-- Page Header -->
+
+    <div class="page-header">
+
+        <h1>Browse Hotels</h1>
+
+        <p class="lead">Find and book the perfect stay for your trip</p>
+
+    </div>
+
+    
+
+    <!-- Search Card -->
+
+    <div class="search-card">
+
+        <form method="GET" class="search-form">
+
+            <div class="search-input">
+
+                <label for="place" class="form-label">Search by Location</label>
+
+                <input type="text" name="place" id="place" class="form-control-modern" 
+
+                       placeholder="Enter city or place name..." value="{{ search_place or '' }}">
+
+            </div>
+
+            <button type="submit" class="btn btn-primary-modern btn-modern">
+
+                <i class="fas fa-search me-2"></i>Search Hotels
+
+            </button>
+
+        </form>
+
+    </div>
+
+    
+
+    <!-- Hotels Grid -->
+
+    {% if hotels %}
+
+        <div class="hotels-grid">
+
+            {% for hotel in hotels %}
+
+            <div class="hotel-card" style="animation-delay: {{ loop.index0 * 0.1 }}s;">
+
+                <div class="hotel-image">
+
+                    <i class="fas fa-hotel"></i>
+
+                </div>
+
+                <div class="hotel-content">
+
+                    <h5 class="hotel-name">{{ hotel.hotel_name }}</h5>
+
+                    <div class="hotel-location">
+
+                        <i class="fas fa-map-marker-alt"></i>
+
+                        {{ hotel.place_name }}
+
+                    </div>
+
+                    <div class="hotel-details">
+
+                        <div>
+
+                            <div class="hotel-price">₹{{ hotel.price_per_night }}</div>
+
+                            <div class="hotel-rooms">per night</div>
+
+                        </div>
+
+                        <div>
+
+                            <div class="hotel-rooms">{{ hotel.available_rooms }} rooms available</div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="mt-3">
+
+                        <a href="/book_user_hotel/{{ hotel.id }}" class="btn btn-success-modern btn-modern w-100">
+
+                            <i class="fas fa-bed me-2"></i>Book Now
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="no-hotels animate-fadeInUp">
+
+            <i class="fas fa-search"></i>
+
+            <h3>No Hotels Found</h3>
+
+            <p>{% if search_place %}No hotels found in "{{ search_place }}". Try a different location.{% else %}No hotels available at the moment.{% endif %}</p>
+
+            <a href="/dashboard" class="btn btn-primary-modern btn-modern">
+
+                <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+
+            </a>
+
+        </div>
+
+    {% endif %}
+
+    
+
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
+

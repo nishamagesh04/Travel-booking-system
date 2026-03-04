@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Bookings</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        body { background-color: #f4f6f9; }
+        .table-responsive { max-height: 80vh; overflow-y: auto; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+        <span class="navbar-brand">Admin – Manage Bookings</span>
+        <a href="/admin_dashboard" class="btn btn-light btn-sm">Dashboard</a>
+    </div>
+</nav>
+
+<div class="container-fluid mt-4">
+    <div class="table-responsive bg-white p-3 rounded shadow-sm">
+
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>User Info</th>
+                    <th>Place</th>
+                    <th>Trip</th>
+                    <th>Travel</th>
+                    <th>Extras</th>
+                    <th>Payment</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                    <th>Guide</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            {% for b in bookings %}
+                <tr>
+                    <td>
+                        <strong>{{ b.booking_name }}</strong><br>
+                        <small>
+                            <i class="bi bi-envelope"></i> {{ b.email }}<br>
+                            <i class="bi bi-telephone"></i> {{ b.phone }}
+                        </small>
+                    </td>
+
+                    <td>
+                        <span class="badge bg-info text-dark">
+                            {{ b.place_name }}
+                        </span>
+                    </td>
+
+                    <td>
+                        {{ b.days }} Days<br>
+                        {{ b.persons }} Persons
+                    </td>
+
+                    <td>
+                        <strong>Date:</strong> {{ b.travel_date }}<br>
+                        <strong>Pickup:</strong> {{ b.pickup_location }}
+                    </td>
+
+                    <td>
+                        {% if b.suggested_places %}
+                            <span class="badge bg-warning text-dark">
+                                {{ b.suggested_places }}
+                            </span>
+                        {% else %}
+                            <small class="text-muted">None</small>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if b.payment_method == 'online' %}
+                            <span class="badge bg-success">Online</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Cash</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        <strong>₹{{ b.price }}</strong>
+                    </td>
+
+                    <td>
+                        {% if b.status == 'Approved' %}
+                            <span class="badge bg-success">Approved</span>
+                        {% elif b.status == 'Rejected' %}
+                            <span class="badge bg-danger">Rejected</span>
+                        {% else %}
+                            <span class="badge bg-warning text-dark">Pending</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if b.guide_name %}
+                            <span class="badge bg-primary">
+                                <i class="bi bi-person"></i> {{ b.guide_name }}
+                            </span>
+                        {% else %}
+                            <small class="text-muted">Not Assigned</small>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if b.status == 'Pending' %}
+                            <a href="/update_booking_status/{{ b.id }}/Approved"
+                               class="btn btn-success btn-sm">
+                                <i class="bi bi-check-circle"></i>
+                            </a>
+
+                            <a href="/update_booking_status/{{ b.id }}/Rejected"
+                               class="btn btn-danger btn-sm">
+                                <i class="bi bi-x-circle"></i>
+                            </a>
+
+                        {% elif b.status == 'Approved' and not b.guide_id %}
+                            <a href="/assign_guide/{{ b.id }}" 
+                               class="btn btn-primary btn-sm">
+                                <i class="bi bi-person-plus"></i>
+                            </a>
+                        {% else %}
+                            <small class="text-muted">Done</small>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

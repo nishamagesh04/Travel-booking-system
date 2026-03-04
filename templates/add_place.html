@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Place</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f4f6f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .card {
+            border-radius: 18px;
+        }
+
+        h4 {
+            font-weight: 600;
+        }
+    </style>
+
+    <script>
+        function addSpotField() {
+            let div = document.createElement("div");
+            div.className = "row g-2 mb-2";
+            div.innerHTML = `
+                <div class="col-md-6">
+                    <input type="text" name="spot_name[]" class="form-control" placeholder="Spot Name" required>
+                </div>
+                <div class="col-md-4">
+                    <input type="number" name="extra_price[]" class="form-control" placeholder="Extra Price (₹)" required>
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-danger w-100" onclick="this.parentElement.parentElement.remove()">×</button>
+                </div>
+            `;
+            document.getElementById("spots-container").appendChild(div);
+        }
+    </script>
+</head>
+
+<body>
+
+<div class="container mt-5 mb-5">
+    <h4 class="mb-4">Add New Place</h4>
+
+    <form method="POST" enctype="multipart/form-data" class="card p-4 shadow">
+
+        <!-- Place Name -->
+        <div class="mb-3">
+            <label class="form-label">Place Name</label>
+            <input type="text" name="place_name" class="form-control" placeholder="Eg: Goa" required>
+        </div>
+
+        <!-- Region -->
+        <div class="mb-3">
+            <label class="form-label">Region</label>
+            <select name="region" class="form-select" required>
+                <option value="">Select Region</option>
+                <option>South India</option>
+                <option>North India</option>
+                <option>East India</option>
+                <option>West India</option>
+            </select>
+        </div>
+
+        <!-- Days -->
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Minimum Days</label>
+                <input type="number" name="min_days" class="form-control" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Maximum Days</label>
+                <input type="number" name="max_days" class="form-control" required>
+            </div>
+        </div>
+
+        <!-- Visiting Spots with Price -->
+        <div class="mb-3">
+            <label class="form-label">Visiting Spots & Price</label>
+
+            <div id="spots-container">
+                <div class="row g-2 mb-2">
+                    <div class="col-md-6">
+                        <input type="text" name="spot_name[]" class="form-control" placeholder="Spot Name" required>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="number" name="extra_price[]" class="form-control" placeholder="Extra Price (₹)" required>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-sm btn-outline-primary mt-2" onclick="addSpotField()">
+                + Add Another Spot
+            </button>
+        </div>
+
+        <!-- Place Images -->
+        <div class="mb-4">
+            <label class="form-label">Place Images</label>
+            <input type="file" name="images[]" class="form-control" multiple accept="image/*" required>
+        </div>
+
+        <!-- Buttons -->
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-success">
+                Save Place
+            </button>
+            <a href="/admin_dashboard" class="btn btn-secondary">
+                Back
+            </a>
+        </div>
+
+    </form>
+</div>
+
+</body>
+</html>

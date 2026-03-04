@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f0f2f5;
+        }
+        .card-box {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .card-box:hover {
+            transform: translateY(-5px);
+        }
+        .nav-link {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container">
+        <span class="navbar-brand">Admin Dashboard</span>
+        <a href="/logout" class="btn btn-danger btn-sm">Logout</a>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="row g-4">
+
+        <div class="col-md-4">
+            <div class="card-box text-center">
+                <h5>Add Place</h5>
+                <p>Add new travel destinations</p>
+                <a href="/add_place" class="btn btn-primary">Go</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card-box text-center">
+                <h5>Manage Bookings</h5>
+                <p>View or delete bookings</p>
+                <a href="/manage_bookings" class="btn btn-success">Go</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card-box text-center">
+                <h5>View Places</h5>
+                <p>Check all existing destinations</p>
+                <a href="/view_places" class="btn btn-warning">Go</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card-box text-center">
+                <h5>Add Tourist Guide</h5>
+                <p>Add new guide for assignments</p>
+                <a href="/add_guide" class="btn btn-primary">Go</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card-box text-center">
+                <h5>Guide Live Updates</h5>
+                <p>Track guide progress</p>
+                <a href="/admin_guide_updates" class="btn btn-info">View</a>
+            </div>
+        </div>
+
+        <!-- Hotel Approvals -->
+<div class="col-md-4">
+    <div class="card-box text-center">
+        <h5>Hotel Approvals</h5>
+        <p>Approve hotels submitted by owners</p>
+        <a href="/admin/hotel_approvals" class="btn btn-warning">View</a>
+    </div>
+</div>
+
+<!-- Hotel Bookings -->
+<div class="col-md-4">
+    <div class="card-box text-center">
+        <h5>Hotel Bookings</h5>
+        <p>View bookings for all approved hotels</p>
+        <a href="/admin/hotel_bookings" class="btn btn-success">View</a>
+    </div>
+</div>
+
+
+    </div>
+</div>
+
+</body>
+</html>

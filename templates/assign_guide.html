@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Assign Tourist Guide</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f6f9;
+            font-family: Arial, sans-serif;
+        }
+        .card {
+            max-width: 600px;
+            margin: 50px auto;
+        }
+        .card h4 {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card p-4 shadow-sm">
+
+        <h4>Assign Guide for Booking: <strong>{{ booking.booking_name }}</strong></h4>
+
+        <form method="POST">
+            <div class="mb-3">
+                <label class="form-label">Select Available Guide</label>
+                <select name="guide_id" class="form-select" required>
+                    {% for g in guides %}
+                        <option value="{{ g.id }}">
+                            {{ g.guide_name }} ({{ g.phone }}) - Places: {{ g.places }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-person-check"></i> Assign Guide
+                </button>
+                <a href="/manage_bookings" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left-circle"></i> Back
+                </a>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

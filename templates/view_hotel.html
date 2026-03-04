@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{{ hotel.hotel_name }} - Details</title>
+
+  <style>
+    body { background:#0b1b24; color:white; font-family:Arial; }
+    .wrap { width:90%; margin:20px auto; }
+    .card { background:rgba(255,255,255,0.08); border-radius:16px; padding:18px; }
+    .grid { display:grid; grid-template-columns: 1.2fr 0.8fr; gap:18px; }
+    .gallery { display:flex; gap:10px; flex-wrap:wrap; }
+    .gallery img { width:220px; height:140px; object-fit:cover; border-radius:12px; border:1px solid rgba(255,255,255,0.15); }
+    input, button { width:100%; padding:10px; margin-top:10px; border-radius:10px; border:none; }
+    input { background:#fff; }
+    button { background:#f5c400; font-weight:bold; cursor:pointer; }
+    .pill { display:inline-block; padding:6px 12px; border-radius:999px; background:rgba(0,0,0,0.35); margin-right:8px; }
+    a { color:white; text-decoration:none; }
+    .top { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+  </style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <!-- TOP -->
+  <div class="top">
+    <h2>{{ hotel.hotel_name }}</h2>
+    <a href="{{ url_for('search_hotels') }}">⬅ Back</a>
+  </div>
+
+  <div class="grid">
+
+    <!-- LEFT SIDE -->
+    <div class="card">
+
+      <div style="margin-bottom:12px;">
+        <span class="pill">Place: {{ hotel.place_name }}</span>
+        <span class="pill">Spot: {{ hotel.spot_name }}</span>
+        <span class="pill">₹{{ hotel.price_per_night }}/night</span>
+        <span class="pill">Available: {{ hotel.available_rooms }}</span>
+      </div>
+
+      <h3>Address</h3>
+      <p style="opacity:0.9;">{{ hotel.address }}</p>
+
+      <h3>Photos</h3>
+
+      <div class="gallery">
+        {% if images and images|length > 0 %}
+          {% for img in images %}
+            <!-- FIXED IMAGE PATH -->
+            <img src="{{ url_for('static', filename='uploads/hotels/' + img.image_name) }}"
+                 alt="Hotel photo">
+          {% endfor %}
+        {% else %}
+          <p style="opacity:0.8;">No photos uploaded yet.</p>
+        {% endif %}
+      </div>
+
+    </div>
+
+
+    <!-- RIGHT SIDE BOOKING -->
+    <div class="card">
+
+      <h3>Book this hotel</h3>
+
+      <form method="POST" action="/hotel/{{ hotel.id }}/book">
+
+        <input type="text" name="full_name" placeholder="Full Name" required>
+        <input type="text" name="phone" placeholder="Phone Number" required>
+
+        <label style="margin-top:8px; display:block;">Check-in</label>
+        <input type="date" name="check_in" required>
+
+        <label style="margin-top:8px; display:block;">Check-out</label>
+        <input type="date" name="check_out" required>
+
+        <input type="number" name="rooms"
+               min="1"
+               max="{{ hotel.available_rooms }}"
+               value="1"
+               required>
+
+        <button type="submit">Confirm Booking</button>
+      </form>
+
+      <p style="opacity:0.8; margin-top:10px;">
+        Price per night: ₹{{ hotel.price_per_night }} <br>
+        Rooms available: {{ hotel.available_rooms }}
+      </p>
+
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

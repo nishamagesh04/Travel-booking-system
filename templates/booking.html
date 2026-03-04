@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Booking - {{ place.place_name }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f5f7fa;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .card {
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .price-box {
+            background: #eef3ff;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .btn-primary {
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 500;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #3b5bff;
+        }
+
+        .form-check-label {
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        #onlineNotice {
+            display: none;
+            margin-top: 5px;
+            font-size: 0.9rem;
+        }
+
+        .card h4 {
+            margin-bottom: 25px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .card h5 {
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .form-control, .form-select {
+            border-radius: 12px;
+        }
+
+        .spot {
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .card { margin-bottom: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <div class="row g-4">
+
+        <!-- LEFT: EXTRA SPOTS -->
+        <div class="col-md-4">
+            <div class="card p-4">
+                <!-- Main place name with location icon -->
+                <h5><i class="bi bi-geo-alt-fill text-danger"></i> {{ place.place_name }}</h5>
+
+                {% if spots %}
+                    {% for s in spots %}
+                    <div class="form-check spot">
+                        <input class="form-check-input spot"
+                               type="checkbox"
+                               value="{{ s.spot_name }}"
+                               data-price="{{ s.extra_price }}"
+                               onchange="calculatePrice()">
+                        <label class="form-check-label">
+                            {{ s.spot_name }} (+₹{{ s.extra_price }})
+                        </label>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted small">No extra spots available</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- RIGHT: BOOKING FORM -->
+        <div class="col-md-8">
+            <div class="card p-5">
+                <h4>Booking Details</h4>
+
+                <div class="price-box">
+                    <p><strong>Base Price / Day:</strong> ₹1000</p>
+                    <p><strong>User Suggested Spots:</strong> ₹1500 per place</p>
+                    <p class="fs-5"><strong>Total Amount:</strong> ₹<span id="totalAmount">0</span></p>
+                </div>
+
+                <form method="POST" action="/payment" id="bookingForm">
+                    <input type="hidden" name="place_id" value="{{ place.id }}">
+                    <input type="hidden" id="total_price" name="total_price">
+                    <input type="hidden" id="admin_spots" name="admin_spots">
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label>Days</label>
+                            <input type="number" id="days" name="days"
+                                   value="{{ place.min_days }}"
+                                   min="{{ place.min_days }}"
+                                   max="{{ place.max_days }}"
+                                   class="form-control"
+                                   onchange="calculatePrice()" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label>Persons</label>
+                            <input type="number" id="persons" name="persons"
+                                   value="1" class="form-control"
+                                   onchange="calculatePrice()" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 mt-3">
+                        <label>Full Name</label>
+                        <input type="text" name="name" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Email</label>
+                        <input type="email" name="email" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Phone</label>
+                        <input type="text" name="phone" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Travel Date</label>
+                        <input type="date" name="travel_date" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Pickup Location</label>
+                        <input type="text" name="pickup_location" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Suggest Extra Places (comma separated)</label>
+                        <textarea name="user_suggestions"
+                                  id="userSuggestions"
+                                  class="form-control"
+                                  placeholder="Eg: Varkala Beach, Athirapally Falls"
+                                  onkeyup="calculatePrice()"></textarea>
+                        <small class="text-muted">₹1500 per place</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Payment Method</label>
+                        <select class="form-select" name="payment_method" id="paymentMethod" required>
+                            <option value="">Select Payment</option>
+                            <option value="cash">Pay in Hand / Contact for Payment</option>
+                            <option value="online">Online Payment</option>
+                        </select>
+                        <small id="onlineNotice" class="text-info">
+                            Our team will contact you for the online payment.
+                        </small>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 mt-3">
+                        Confirm Booking
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function calculatePrice() {
+    let days = parseInt(document.getElementById("days").value) || 0;
+    let persons = parseInt(document.getElementById("persons").value) || 0;
+    let base = 1000;
+
+    let adminExtra = 0;
+    let adminSpots = [];
+    document.querySelectorAll(".spot:checked").forEach(s => {
+        adminExtra += parseInt(s.dataset.price) || 0;
+        adminSpots.push(s.value);
+    });
+
+    let userText = document.getElementById("userSuggestions").value;
+    let userCount = userText
+        ? userText.split(',').filter(p => p.trim() !== '').length
+        : 0;
+    let userExtra = userCount * 1500;
+
+    let total = (days * persons * base) + adminExtra + userExtra;
+
+    document.getElementById("totalAmount").innerText = total;
+    document.getElementById("total_price").value = total;
+    document.getElementById("admin_spots").value = adminSpots.join(",");
+}
+
+document.getElementById('paymentMethod').addEventListener('change', function() {
+    const notice = document.getElementById('onlineNotice');
+    notice.style.display = this.value === 'online' ? 'block' : 'none';
+});
+
+window.onload = calculatePrice;
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

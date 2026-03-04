@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TravelEase India</title>
+
+    <!-- Bootstrap CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: -1;
+        }
+
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-section {
+            margin-top: 100px;
+            padding-bottom: 70px;
+        }
+
+        .hero-section h1 {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            margin-top: 15px;
+        }
+
+        .btn-custom {
+            width: 200px;
+            padding: 12px;
+            font-size: 1.05rem;
+            border-radius: 30px;
+        }
+
+        .card-box {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 45px;
+            border-radius: 22px;
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.18);
+        }
+
+        /* NEW: Overview section styling */
+        .overview-section {
+            padding: 60px 0 90px;
+        }
+
+        .overview-card {
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 20px;
+            backdrop-filter: blur(12px);
+            padding: 35px;
+        }
+
+        .overview-card h2 {
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .overview-card p {
+            color: rgba(255,255,255,0.85);
+            margin-bottom: 0;
+            line-height: 1.7;
+        }
+
+        .feature-box {
+            background: rgba(255,255,255,0.10);
+            border: 1px solid rgba(255,255,255,0.14);
+            border-radius: 16px;
+            padding: 18px;
+            height: 100%;
+        }
+
+        .feature-title {
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .feature-desc {
+            color: rgba(255,255,255,0.80);
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        .scroll-btn {
+            margin-top: 18px;
+            border-radius: 30px;
+            padding: 10px 18px;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #ddd;
+        }
+
+        /* make footer not cover content on small screens */
+        @media (max-width: 768px) {
+            footer { position: static; padding: 18px 0; }
+            .hero-section { padding-bottom: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Background Video -->
+<video class="bg-video" autoplay muted loop>
+    <source src="/static/videos/travel.mp4" type="video/mp4">
+</video>
+
+<div class="overlay"></div>
+
+<!-- Navbar -->
+<nav class="navbar navbar-dark">
+    <div class="container d-flex justify-content-between align-items-center">
+        <span class="navbar-brand mb-0 h1">🌏 TravelEase India</span>
+
+        <!-- NEW: Overview button (scroll) -->
+        <button class="btn btn-outline-light btn-sm scroll-btn" onclick="scrollToOverview()">
+            Learn About TravelEase ↓
+        </button>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<div class="container hero-section text-center">
+    <div class="row justify-content-center">
+        <div class="col-md-9 card-box">
+
+            <h1>Plan • Stay • Explore India</h1>
+            <p>Book trips, hotels & guides in one place</p>
+
+            <!-- MAIN ACTIONS -->
+            <div class="row mt-4 justify-content-center">
+
+                <!-- USER -->
+                <div class="col-md-4 mb-3">
+                    <a href="/login" class="btn btn-primary btn-custom mb-2">User Login</a>
+                    <br>
+                    <a href="/signup" class="btn btn-outline-light btn-custom">User Sign Up</a>
+                </div>
+
+                <!-- HOTEL OWNER -->
+                <div class="col-md-4 mb-3">
+                    <a href="/hotel_login" class="btn btn-success btn-custom mb-2">🏨 Hotel Login</a>
+                    <br>
+                    <a href="/hotel_register" class="btn btn-outline-light btn-custom">Hotel Register</a>
+                </div>
+
+                <!-- ADMIN & GUIDE -->
+                <div class="col-md-4 mb-3">
+                    <a href="/admin" class="btn btn-warning btn-custom mb-2">🔐 Admin Login</a>
+                    <br>
+                    <a href="/guide_login" class="btn btn-info btn-custom">🧭 Guide Login</a>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- NEW: OVERVIEW SECTION -->
+<div id="overview" class="container overview-section">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+
+            <div class="overview-card">
+                <h2>Overview of TravelEase India</h2>
+                <p>
+                    <b>TravelEase India</b> is an all-in-one travel management platform designed to make trip planning
+                    simple and organized. Users can explore destinations, book hotels, and connect with local guides
+                    from one place. At the same time, hotel owners can register their hotels and manage bookings,
+                    while guides can log in to handle tour requests. The admin controls and monitors the system for
+                    security, quality, and smooth operations.
+                </p>
+
+                <hr class="border-light border-opacity-25 my-4">
+
+                <div class="row g-3">
+                    <div class="col-md-6 col-lg-3">
+                        <div class="feature-box">
+                            <div class="feature-title">👤 User Module</div>
+                            <p class="feature-desc">Browse trips, book hotels, and choose guides easily.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3">
+                        <div class="feature-box">
+                            <div class="feature-title">🏨 Hotel Module</div>
+                            <p class="feature-desc">Register hotels, update rooms, manage bookings.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3">
+                        <div class="feature-box">
+                            <div class="feature-title">🧭 Guide Module</div>
+                            <p class="feature-desc">Guide login to accept tours and manage availability.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3">
+                        <div class="feature-box">
+                            <div class="feature-title">🔐 Admin Module</div>
+                            <p class="feature-desc">Manage platform users, hotels, guides, and security.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <a href="#top" class="btn btn-outline-light btn-sm rounded-pill" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+                        Back to Top ↑
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<footer>
+    © 2025 TravelEase India | Explore • Stay • Travel
+</footer>
+
+<script>
+    function scrollToOverview() {
+        document.getElementById("overview").scrollIntoView({ behavior: "smooth" });
+    }
+</script>
+
+</body>
+</html>
