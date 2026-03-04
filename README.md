@@ -171,10 +171,6 @@ For support or issues, please:
 3. Include steps to reproduce
 4. Attach relevant screenshots
 
-## License
-
-[Specify your license here]
-
 ## Contact
 
 For more information or inquiries, [contact information]
